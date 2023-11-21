@@ -1,16 +1,23 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ChevronsLeft, MenuIcon, PlusCircle } from "lucide-react";
+import {
+  ChevronsLeft,
+  MenuIcon,
+  PlusCircle,
+  Search,
+  Settings,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import UserItem from "./UserItem";
 
-import { useQuery, useMutation } from "convex/react";
+import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import Item from "./Item";
 import { toast } from "sonner";
+import DocumentList from "./DocumentList";
 
 function Navigation() {
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -23,7 +30,6 @@ function Navigation() {
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
 
-  const documents = useQuery(api.documents.get);
   const create = useMutation(api.documents.create);
 
   // If switched onto mobile size, then the sidebar is going to collapse itself.
@@ -142,12 +148,12 @@ function Navigation() {
         </div>
         <div>
           <UserItem />
+          <Item label="Search" icon={Search} isSearch onClick={() => {}} />
+          <Item label="Settings" icon={Settings} onClick={() => {}} />
           <Item onClick={handleCreate} label="New Page" icon={PlusCircle} />
         </div>
         <div className="mt-4">
-          {documents?.map((document) => (
-            <p key={document._id}>{document.title}</p>
-          ))}
+          <DocumentList />
         </div>
         {/* The little effect on the right side for expanding the navigation */}
         <div
